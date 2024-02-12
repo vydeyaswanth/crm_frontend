@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from '../api/axios';
+import axios from '../../api/axios';
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
@@ -27,8 +27,8 @@ const CustomerList = () => {
   return (
     <div>
       <h2>Customers</h2>
-      <ul>{customers.map(customer => (<li key={customer.id}><Link to={"/customers/${customer.id}"}>{customer.name}</Link></li>))}</ul>
-      <Link to="/customers/new">Add New Customer</Link>
+      <ul>{customers.map(customer => (<li key={customer.id}><Link to={'/customers/${customer.id}'}>{customer.name}</Link></li>))}</ul>
+      <Link to='/customers/new'>Add New Customer</Link>
     </div>
   );
 };

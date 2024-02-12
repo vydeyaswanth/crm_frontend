@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import axios from '../api/axios';
-import { useHistory } from 'react-router-dom';
+import axios from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
 
 const CustomerForm = () => {
   const [formData, setFormData] = useState({ name: '', email: '' });
   const [error, setError] = useState('');
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,7 +15,7 @@ const CustomerForm = () => {
     event.preventDefault();
     try {
       await axios.post('/customers', formData);
-      history.push('/');
+      navigate.push('/');
     } catch (err) {
       setError('Error creating customer');
       console.error(err);
@@ -30,11 +30,11 @@ const CustomerForm = () => {
     <form onSubmit={handleSubmit}>
       <label>
         Name:
-        <input type="text" value={name} onChange={e => setName(e.target.value)} />
+        <input type="text" value={formData.name} onChange={handleChange} name="name" />
       </label>
       <label>
         Email:
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input type="email" value={formData.email} onChange={handleChange} name="email" />
       </label>
       <button type="submit">Submit</button>
     </form>

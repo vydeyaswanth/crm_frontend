@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../api/axios';
+import axios from '../../api/axios';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const ContactList = ({ customerId }) => {
   const [contacts, setContacts] = useState([]);
@@ -8,7 +10,7 @@ const ContactList = ({ customerId }) => {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const response = await axios.get("/customers/${customerId}/contacts");
+        const response = await axios.get('/customers/${customerId}/contacts');
         setContacts(response.data);
       } catch (err) {
         setError('Error fetching contacts');
@@ -33,9 +35,13 @@ const ContactList = ({ customerId }) => {
           </li>
         ))}
       </ul>
-      <Link to={"/customers/${customerId}/contacts/new"}>Add New Contact</Link>
+      <Link to={'/customers/${customerId}/contacts/new'}>Add New Contact</Link>
     </div>
   );
+};
+
+ContactList.propTypes = {
+  customerId: PropTypes.string.isRequired,
 };
 
 export default ContactList;
