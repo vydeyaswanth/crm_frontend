@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import CustomerList from './components/Customers/CustomerList';
+import CustomerForm from './components/Customers/CustomerForm';
+import CustomerDetails from './components/Customers/CustomerDetails';
+import ContactForm from './components/Contacts/ContactForm';
+import InteractionForm from './components/Interactions/InteractionForm';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <Switch>
+          <Route path="/" exact component={CustomerList} />
+          <Route path="/customers/new" component={CustomerForm} />
+          <Route path="/customers/:id" component={CustomerDetails} />
+          <Route path="/customers/:customerId/contacts/new" component={ContactForm} />
+          <Route path="/customers/:customerId/interactions/new" component={InteractionForm} />
+        </Switch>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
