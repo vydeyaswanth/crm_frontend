@@ -1,11 +1,34 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from '../api/axios';
 import ContactList from './Contacts/ContactList';
 import InteractionList from './Interactions/InteractionList';
+import { useParams } from 'react-router-dom';
 
-const CustomerDetails = ({ customer, onBack }) => {
+const CustomerDetails = () => {
+  const [customer, setCustomer] = useState(null);
+  const [error, setError] = useState('');
+  const { id } = useParams(); // Gets the customer ID from URL params
+
+  useEffect(() => {
+    const fetchCustomerDetails = async () => {
+      try {
+        const response = await axios.get("/customers/${id}");
+        setCustomer(response.data);
+      } catch (err) {
+        setError('Error fetching customer details');
+        console.error(err);
+      }
+    };
+
+    fetchCustomerDetails();
+  }, [id]);
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
   if (!customer) {
-    return <div>Loading...</div>;
+    return <p>Loading customer details...</p>;
   }
 
   return (
@@ -14,7 +37,10 @@ const CustomerDetails = ({ customer, onBack }) => {
       <p>Name: {customer.name}</p>
       <p>Email: {customer.email}</p>
 
+      <h3>Contacts</h3>
       <ContactList contacts={customer.contacts} customerId={customer.id} />
+
+      <h3>Interactions</h3>
       <InteractionList interactions={customer.interactions} customerId={customer.id} />
 
       <button onClick={onBack}>Back to Customer List</button>

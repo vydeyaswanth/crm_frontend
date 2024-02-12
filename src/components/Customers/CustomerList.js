@@ -1,7 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from '../api/axios';
 
-const CustomerList = ({ customers }) => {
+const CustomerList = () => {
+  const [customers, setCustomers] = useState([]);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await axios.get('/customers');
+        setCustomers(response.data);
+      } catch (err) {
+        setError('Error fetching customers');
+        console.error(err);
+      }
+    };
+
+    fetchCustomers();
+  }, []);
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
   return (
     <div>
       <h2>Customers</h2>

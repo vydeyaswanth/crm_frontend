@@ -1,13 +1,30 @@
 import React, { useState } from 'react';
+import axios from '../api/axios';
+import { useHistory } from 'react-router-dom';
 
-const CustomerForm = ({ onSubmit }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+const CustomerForm = () => {
+  const [formData, setFormData] = useState({ name: '', email: '' });
+  const [error, setError] = useState('');
+  const history = useHistory();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit({ name, email });
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post('/customers', formData);
+      history.push('/');
+    } catch (err) {
+      setError('Error creating customer');
+      console.error(err);
+    }
+  };
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <form onSubmit={handleSubmit}>

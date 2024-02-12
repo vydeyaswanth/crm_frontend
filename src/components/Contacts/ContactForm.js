@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
+import axios from '../api/axios';
+import { useHistory } from 'react-router-dom';
 
-const ContactForm = ({ onSubmit, customerId }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+const ContactForm = ({ customerId }) => {
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+  const [error, setError] = useState('');
+  const history = useHistory();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit({ customerId, name, email, phone });
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post("/customers/${customerId}/contacts", formData);
+      history.push("/customers/${customerId}");
+    } catch (err) {
+      setError('Error creating contact');
+      console.error(err);
+    }
+  };
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <form onSubmit={handleSubmit}>

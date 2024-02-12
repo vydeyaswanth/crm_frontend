@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
+import axios from '../api/axios';
+import { useHistory } from 'react-router-dom';
 
-const InteractionForm = ({ onSubmit, customerId }) => {
-  const [title, setTitle] = useState('');
-  const [details, setDetails] = useState('');
-  const [date, setDate] = useState('');
+const InteractionForm = ({ customerId }) => {
+  const [formData, setFormData] = useState({ title: '', details: '', date: '' });
+  const [error, setError] = useState('');
+  const history = useHistory();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit({ customerId, title, details, date });
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post("/customers/${customerId}/interactions", formData);
+      history.push("/customers/${customerId}");
+    } catch (err) {
+      setError('Error logging interaction');
+      console.error(err);
+    }
+  };
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <form onSubmit={handleSubmit}>

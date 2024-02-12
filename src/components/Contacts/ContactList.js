@@ -1,7 +1,28 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from '../api/axios';
 
-const ContactList = ({ contacts, customerId }) => {
+const ContactList = ({ customerId }) => {
+  const [contacts, setContacts] = useState([]);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const response = await axios.get("/customers/${customerId}/contacts");
+        setContacts(response.data);
+      } catch (err) {
+        setError('Error fetching contacts');
+        console.error(err);
+      }
+    };
+
+    fetchContacts();
+  }, [customerId]);
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
   return (
     <div>
       <h2>Contacts</h2>
