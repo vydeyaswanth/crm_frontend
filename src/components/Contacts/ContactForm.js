@@ -14,11 +14,6 @@ const ContactForm = ({ refetchContacts }) => {
     return re.test(String(email).toLowerCase());
   };
 
-  const validatePhone = (phone) => {
-    const re = /^\d{10}$/; // Simple regex for 10 digit number
-    return re.test(phone);
-  };
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -28,12 +23,7 @@ const ContactForm = ({ refetchContacts }) => {
     
     if (!validateEmail(formData.email)) {
       setError('Invalid email address');
-      return;
-    }
-
-    if (!validatePhone(formData.phone)) {
-      setError('Invalid phone number');
-      return;
+      return; // Stops the function here
     }
 
     try {
@@ -48,10 +38,6 @@ const ContactForm = ({ refetchContacts }) => {
     }
   };
 
-  if (error) {
-    return <p>{error}</p>;
-  }
-
   return (
     <form onSubmit={handleSubmit}>
       <label>
@@ -64,7 +50,7 @@ const ContactForm = ({ refetchContacts }) => {
       </label>
       <label>
         Phone:
-        <input type="text" value={formData.phone} onChange={handleChange} name="phone" />
+        <input type="number" value={formData.phone} onChange={handleChange} name="phone" />
       </label>
       {error && <div style={{ color: 'red' }}>{error}</div>}
       <button type="submit">Submit</button>
