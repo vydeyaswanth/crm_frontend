@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const CustomerDetails = ({ refetchCustomers }) => {
   const [customer, setCustomer] = useState(null);
   const [error, setError] = useState('');
-  const { id } = useParams(); // Gets the customer ID from URL params 
+  const { id } = useParams(); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const CustomerDetails = ({ refetchCustomers }) => {
     if (window.confirm('Are you sure you want to delete this customer?')) {
       try {
         await axios.delete(`/customers/${id}`);
-        await refetchCustomers(); // Refetch the customer list
+        await refetchCustomers(); 
         navigate('/');
       } catch (err) {
         console.error(err);

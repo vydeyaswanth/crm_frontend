@@ -32,8 +32,6 @@ const ContactEdit = () => {
       await axios.put(`/customers/${customerId}/contacts/${contactId}`, formData);
       // Navigate back to CustomerDetails
       navigate(`/customers/${customerId}`);
-      // Trigger a refresh of the contact list in CustomerDetails component
-      // This can be done using a global state, context, or another method
     } catch (err) {
       setError('Error updating contact');
       console.error(err);

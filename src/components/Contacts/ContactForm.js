@@ -23,7 +23,7 @@ const ContactForm = ({ refetchContacts }) => {
     
     if (!validateEmail(formData.email)) {
       setError('Invalid email address');
-      return; // Stops the function here
+      return; 
     }
 
     try {

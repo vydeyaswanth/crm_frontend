@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const ContactList = ({ customerId }) => {
   const [contacts, setContacts] = useState([]);
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // Define useNavigate hook
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchContacts = async () => {
