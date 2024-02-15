@@ -9,12 +9,33 @@ const ContactForm = ({ refetchContacts }) => {
   const { customerId } = useParams(); 
   const navigate = useNavigate();
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validatePhone = (phone) => {
+    const re = /^\d{10}$/; // Simple regex for 10 digit number
+    return re.test(phone);
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
+    if (!validateEmail(formData.email)) {
+      setError('Invalid email address');
+      return;
+    }
+
+    if (!validatePhone(formData.phone)) {
+      setError('Invalid phone number');
+      return;
+    }
+
     try {
       await axios.post(`/customers/${customerId}/contacts`, formData);
       if (refetchContacts) {
@@ -45,13 +66,13 @@ const ContactForm = ({ refetchContacts }) => {
         Phone:
         <input type="text" value={formData.phone} onChange={handleChange} name="phone" />
       </label>
-      <button type="submit" onClick={handleSubmit}>Submit</button>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+      <button type="submit">Submit</button>
     </form>
   );
 };
 
 ContactForm.propTypes = {
-  customerId: PropTypes.string.isRequired,
   refetchContacts: PropTypes.func.isRequired,
 };
 

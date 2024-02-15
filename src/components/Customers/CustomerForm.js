@@ -11,8 +11,18 @@ const CustomerForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!validateEmail(formData.email)) {
+      setError('Invalid email address');
+      return;
+    }
+
     try {
       await axios.post('/customers', formData);
       navigate('/');
@@ -22,12 +32,8 @@ const CustomerForm = () => {
     }
   };
 
-  if (error) {
-    return <p>{error}</p>;
-  }
-
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <label>
         Name:
         <input type="text" value={formData.name} onChange={handleChange} name="name" />
@@ -36,7 +42,8 @@ const CustomerForm = () => {
         Email:
         <input type="email" value={formData.email} onChange={handleChange} name="email" />
       </label>
-      <button type="submit" onClick={handleSubmit}>Submit</button>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+      <button type="submit">Submit</button>
     </form>
   );
 };
