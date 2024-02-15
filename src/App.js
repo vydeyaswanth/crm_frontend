@@ -6,6 +6,8 @@ import CustomerDetails from './components/Customers/CustomerDetails';
 import ContactForm from './components/Contacts/ContactForm';
 import InteractionForm from './components/Interactions/InteractionForm';
 import CustomerEdit from './components/Customers/CustomerEdit';
+import ContactEdit from './components/Contacts/ContactEdit';
+import InteractionEdit from './components/Interactions/InteractionEdit';
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
           <Route path="/customers/:customerId/contacts/new" element={<ContactForm />} />
           <Route path="/customers/:customerId/interactions/new" element={<InteractionForm />} />
           <Route path="/customers/:id/edit" element={<CustomerEdit />} />
+          <Route path="/customers/:customerId/contacts/:contactId/edit" element={<ContactEdit />} />
+          <Route path="/customers/:customerId/interactions/:interactionId/edit" element={<InteractionEdit />} />
         </Routes>
       </div>
     </Router>

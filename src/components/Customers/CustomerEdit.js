@@ -28,7 +28,7 @@ const CustomerEdit = () => {
     e.preventDefault();
     try {
       await axios.put(`/customers/${id}`, customer);
-      navigate('/');
+      navigate(`/customers/${id}`);
     } catch (err) {
       console.error(err);
     }

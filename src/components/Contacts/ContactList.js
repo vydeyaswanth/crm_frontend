@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate here
 import axios from '../../api/axios';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const ContactList = ({ customerId, refetchContacts }) => {
+const ContactList = ({ customerId }) => {
   const [contacts, setContacts] = useState([]);
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // Define useNavigate hook
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -21,13 +22,25 @@ const ContactList = ({ customerId, refetchContacts }) => {
     fetchContacts();
   }, [customerId]);
 
+  const handleEdit = (contactId) => {
+    navigate(`/customers/${customerId}/contacts/${contactId}/edit`);
+  };  
+
+  const handleDelete = async (contactId) => {
+    if (window.confirm('Are you sure you want to delete this contact?')) {
+      try {
+        await axios.delete(`/customers/${customerId}/contacts/${contactId}`);
+        const response = await axios.get(`/customers/${customerId}/contacts`);
+        setContacts(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
   if (error) {
     return <p>{error}</p>;
   }
-
-  useEffect(() => {
-    refetchContacts();
-  }, [customerId, refetchContacts]);
 
   return (
     <div>
@@ -35,21 +48,18 @@ const ContactList = ({ customerId, refetchContacts }) => {
         {contacts.map(contact => (
           <li key={contact.id}>
             {contact.name} - {contact.email} - {contact.phone}
+            <button onClick={() => handleEdit(contact.id)}>Edit</button>
+            <button onClick={() => handleDelete(contact.id)}>Delete</button>
           </li>
         ))}
       </ul>
-      <Link to={{
-        pathname: `/customers/${customerId}/contacts/new`,
-        state: { customerId, refetchContacts }
-      }}>Add New Contact</Link> 
+      <Link to={`/customers/${customerId}/contacts/new`}>Add New Contact</Link> 
     </div>
   );
 };
 
 ContactList.propTypes = {
   customerId: PropTypes.string.isRequired,
-  contacts: PropTypes.array.isRequired,
-  refetchContacts: PropTypes.func.isRequired,
 };
 
 export default ContactList;
