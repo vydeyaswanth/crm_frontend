@@ -12,12 +12,26 @@ const CustomerList = () => {
         const response = await axios.get('/customers');
         setCustomers(response.data);
       } catch (err) {
-        setError('Error fetching customers');
-        console.error(err);
+        setError('Error fetching customers: ' + err.message);
+        console.error(err.response ? err.response.data : err);
       }
     };
 
     fetchCustomers();
+  }, []);
+
+  const refetchCustomers = async () => {
+    try {
+      const response = await axios.get('/customers');
+      setCustomers(response.data);
+    } catch (err) {
+      setError('Error fetching customers: ' + err.message);
+      console.error(err.response ? err.response.data : err);
+    }
+  };
+
+  useEffect(() => {
+    refetchCustomers();
   }, []);
 
   if (error) {
@@ -27,7 +41,7 @@ const CustomerList = () => {
   return (
     <div>
       <h2>Customers</h2>
-      <ul>{customers.map(customer => (<li key={customer.id}><Link to={'/customers/${customer.id}'}>{customer.name}</Link></li>))}</ul>
+      <ul>{customers.map(customer => (<li key={customer.id}><Link to={`/customers/${customer.id}`}>{customer.name}</Link></li>))}</ul>
       <Link to='/customers/new'>Add New Customer</Link>
     </div>
   );

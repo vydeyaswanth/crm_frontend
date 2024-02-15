@@ -10,7 +10,7 @@ const InteractionList = ({ customerId }) => {
   useEffect(() => {
     const fetchInteractions = async () => {
       try {
-        const response = await axios.get('/customers/${customerId}/interactions');
+        const response = await axios.get(`/customers/${customerId}/interactions`);
         setInteractions(response.data);
       } catch (err) {
         setError('Error fetching interactions');
@@ -27,7 +27,6 @@ const InteractionList = ({ customerId }) => {
 
   return (
     <div>
-      <h2>Interactions</h2>
       <ul>
         {interactions.map(interaction => (
           <li key={interaction.id}>
@@ -35,7 +34,7 @@ const InteractionList = ({ customerId }) => {
           </li>
         ))}
       </ul>
-      <Link to={'/customers/${customerId}/interactions/new'}>Log New Interaction</Link>
+      <Link to={`/customers/${customerId}/interactions/new`}>Log New Interaction</Link>
     </div>
   );
 };

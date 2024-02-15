@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from '../../api/axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const ContactForm = ({ customerId }) => {
+const ContactForm = ({ refetchContacts }) => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const [error, setError] = useState('');
+  const { customerId } = useParams(); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -15,7 +16,10 @@ const ContactForm = ({ customerId }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('/customers/${customerId}/contacts', formData);
+      await axios.post(`/customers/${customerId}/contacts`, formData);
+      if (refetchContacts) {
+        await refetchContacts();
+      }
       navigate(`/customers/${customerId}`);
     } catch (err) {
       setError('Error creating contact');
@@ -41,13 +45,14 @@ const ContactForm = ({ customerId }) => {
         Phone:
         <input type="text" value={formData.phone} onChange={handleChange} name="phone" />
       </label>
-      <button type="submit">Submit</button>
+      <button type="submit" onClick={handleSubmit}>Submit</button>
     </form>
   );
 };
 
 ContactForm.propTypes = {
   customerId: PropTypes.string.isRequired,
+  refetchContacts: PropTypes.func.isRequired,
 };
 
 export default ContactForm;

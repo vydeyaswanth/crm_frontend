@@ -15,7 +15,7 @@ const CustomerForm = () => {
     event.preventDefault();
     try {
       await axios.post('/customers', formData);
-      navigate.push('/');
+      navigate('/');
     } catch (err) {
       setError('Error creating customer');
       console.error(err);
@@ -27,7 +27,7 @@ const CustomerForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <label>
         Name:
         <input type="text" value={formData.name} onChange={handleChange} name="name" />
@@ -36,7 +36,7 @@ const CustomerForm = () => {
         Email:
         <input type="email" value={formData.email} onChange={handleChange} name="email" />
       </label>
-      <button type="submit">Submit</button>
+      <button type="submit" onClick={handleSubmit}>Submit</button>
     </form>
   );
 };
